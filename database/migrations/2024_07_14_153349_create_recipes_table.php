@@ -39,7 +39,7 @@ return new class extends Migration
                     'Tambahkan nasi dan kecap, aduk rata.',
                     'Masak hingga nasi terasa kering dan harum.'
                 ]),
-                'namaFoto' => 'nasi-goreng.jpg',
+                'namaFoto' => 'a3KRo3cOeyvi8HOUXDw0GWkbWp8azjW6wvDe1Ygl.png',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -58,7 +58,7 @@ return new class extends Migration
                     'Angkat dan tiriskan pisang goreng.',
                     'Sajikan pisang goreng hangat.'
                 ]),
-                'namaFoto' => 'pisang-goreng.jpg',
+                'namaFoto' => 'a3KRo3cOeyvi8HOUXDw0GWkbWp8azjW6wvDe1Ygl.png',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -75,7 +75,7 @@ return new class extends Migration
                     'Campurkan semua buah dalam mangkuk besar.',
                     'Sajikan salad buah segar dalam mangkuk atau piring saji.'
                 ]),
-                'namaFoto' => 'salad-buah.jpg',
+                'namaFoto' => 'a3KRo3cOeyvi8HOUXDw0GWkbWp8azjW6wvDe1Ygl.png',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],

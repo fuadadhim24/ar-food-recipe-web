@@ -140,7 +140,7 @@
                                             <th>Bahan</th>
                                             <th>Alat</th>
                                             <th>Step Masak</th>
-                                            <th>Nama Foto</th>
+                                            <th>Foto</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
@@ -268,6 +268,23 @@
                     </div>
                 </div>
 
+                <!-- Modal untuk menampilkan foto -->
+                <div class="modal fade" id="fotoModal" tabindex="-1" aria-labelledby="fotoModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="fotoModalLabel">Foto Resep</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <img id="fotoModalImg" src="" class="img-fluid" alt="Foto Resep">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
             <footer>
@@ -302,6 +319,12 @@
 
 
     <script>
+        function viewFoto(namaFoto) {
+            var fotoUrl = '{{ asset('storage/foto-resep') }}/' + namaFoto;
+            $('#fotoModalImg').attr('src', fotoUrl);
+            $('#fotoModal').modal('show');
+        }
+
         function addStepMasak() {
             var html = `<div class="input-group mb-3">
                         <input type="text" class="form-control" name="stepMasak[]" placeholder="Langkah ${$('#stepMasakInputs').children().length + 1}">
@@ -340,19 +363,19 @@
                 url: "{{ route('admin.recipes.store') }}",
                 type: "POST",
                 data: formData,
-                processData: false, // Untuk memproses data FormData
-                contentType: false, // Untuk menghindari default "application/x-www-form-urlencoded"
+                processData: false,
+                contentType: false,
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 success: function(response) {
-                    alert('Recipe added successfully!');
+                    alert('Resep berhasil ditambahkan!');
                     $('#table2').DataTable().ajax.reload();
                     $('#recipeModal').modal('hide');
                     $('#recipeForm')[0].reset();
                 },
                 error: function(xhr, status, error) {
-                    alert('Error adding recipe: ' + error);
+                    alert('Gagal menambahkan resep: ' + error);
                 }
             });
         });
@@ -426,7 +449,11 @@
 
                     },
                     {
-                        "data": "namaFoto"
+                        "data": "namaFoto",
+                        "render": function(data, type, row) {
+                            return '<button type="button" class="btn btn-primary btn-sm" onclick="viewFoto(\'' +
+                                data + '\')">Lihat Foto</button>';
+                        }
                     },
                     {
                         "data": null,
