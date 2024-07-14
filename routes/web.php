@@ -2,13 +2,18 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\KelasController;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
 Route::get('/dashboard', function () {return view('admin.dashboard');})->middleware(['auth', 'verified'])->name('dashboard');
-Route::get('/kelas', function () {return view('admin.classes.index');})->middleware(['auth', 'verified'])->name('kelas');
+
+// kelas
+Route::get('/kelas', [KelasController::class, 'index'])->middleware(['auth', 'verified'])->name('admin.classes.index');
+Route::post('/kelas/data', [KelasController::class, 'getData'])->middleware(['auth', 'verified'])->name('admin.classes.data');
+// Route::delete('/kelas/{id}', [KelasController::class, 'destroy'])->middleware(['auth', 'verified'])->name('admin.classes.destroy');
 Route::get('/resep', function () {return view('admin.recipes.index');})->middleware(['auth', 'verified'])->name('resep');
 
 Route::middleware('auth')->group(function () {
