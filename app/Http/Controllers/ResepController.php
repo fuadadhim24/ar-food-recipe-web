@@ -26,5 +26,41 @@ class ResepController extends Controller
         $class->delete();
         return response()->json(['success' => true]);
     }
+    
+    public function store(Request $request)
+    {
+        // Validasi input jika diperlukan
+        $request->validate([
+            'nama' => 'required|string',
+            'deskripsi' => 'required|string',
+            'levelKesulitan' => 'required',
+            'durasiMasak' => 'required|string',
+            'bahan' => 'required',
+            'alat' => 'required',
+            'stepMasak' => 'required',
+            'foto' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        if ($request->hasFile('foto')) {
+            $fotoPath = $request->file('foto')->store('public/foto-resep');
+            $namaFoto = basename($fotoPath); // Dapatkan nama file dari path
+        } else {
+            $namaFoto = null;
+        }
+
+        // Simpan data resep ke dalam database
+        Recipes::create([
+            'nama' => $request->nama,
+            'deskripsi' => $request->deskripsi,
+            'levelKesulitan' => $request->levelKesulitan,
+            'durasiMasak' => $request->durasiMasak,
+            'bahan' => json_encode($request->bahan),
+            'alat' => json_encode($request->alat),
+            'stepMasak' => json_encode($request->stepMasak),
+            'namaFoto' => $namaFoto,
+        ]);
+
+        return response()->json(['success' => true]);
+    }
 
 }

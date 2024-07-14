@@ -20,6 +20,7 @@ Route::delete('/kelas/{id}', [KelasController::class, 'destroy'])->middleware(['
 Route::get('/resep', function () {return view('admin.recipes.index');})->middleware(['auth', 'verified'])->name('resep');
 Route::post('/resep/data', [ResepController::class, 'getData'])->middleware(['auth', 'verified'])->name('admin.recipes.data');
 Route::delete('/resep/{id}', [ResepController::class, 'destroy'])->middleware(['auth', 'verified'])->name('admin.recipes.destroy');
+Route::post('/admin/recipes/store', [ResepController::class, 'store'])->name('admin.recipes.store');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

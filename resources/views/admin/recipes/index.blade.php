@@ -14,9 +14,6 @@
     <link rel="stylesheet" href="{{ asset('assets') }}/compiled/css/table-datatable-jquery.css">
     <link rel="stylesheet" href="{{ asset('assets') }}/compiled/css/app.css">
     <link rel="stylesheet" href="{{ asset('assets') }}/compiled/css/app-dark.css">
-
-    {{-- cdn vendor --}}
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.4/css/jquery.dataTables.min.css">
 </head>
 
 <body>
@@ -158,6 +155,119 @@
                 </section>
                 <!-- Minimal jQuery Datatable end -->
 
+                <!-- Button to trigger modal -->
+                <button type="button" class="btn btn-primary mb-2" data-bs-toggle="modal"
+                    data-bs-target="#recipeModal">
+                    Tambah Resep
+                </button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="recipeModal" tabindex="-1" aria-labelledby="recipeModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <form class="form form-vertical" id="recipeForm" enctype="multipart/form-data">
+                                @csrf
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="recipeModalLabel">Tambah Resep Baru</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+
+                                    <div class="form-body">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="form-group">
+                                                    <label for="nama">Nama Resep</label>
+                                                    <input type="text" id="nama" class="form-control"
+                                                        name="nama" placeholder="Nama Resep">
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="form-group">
+                                                    <label for="deskripsi">Deskripsi</label>
+                                                    <textarea id="deskripsi" class="form-control" name="deskripsi" placeholder="Deskripsi Resep"></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="form-group">
+                                                    <label for="levelKesulitan">Level Kesulitan</label>
+                                                    <select id="levelKesulitan" class="form-control"
+                                                        name="levelKesulitan">
+                                                        <option value="mudah">Mudah</option>
+                                                        <option value="sedang">Sedang</option>
+                                                        <option value="sulit">Sulit</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="form-group">
+                                                    <label for="durasiMasak">Durasi Masak (menit)</label>
+                                                    <input type="number" id="durasiMasak" class="form-control"
+                                                        name="durasiMasak" placeholder="cth: 20">
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="form-group">
+                                                    <label>Langkah-langkah Memasak</label>
+                                                    <div id="stepMasakInputs">
+                                                        <div class="input-group mb-3">
+                                                            <input type="text" class="form-control"
+                                                                name="stepMasak[]" placeholder="Langkah 1">
+                                                            <button class="btn btn-outline-secondary" type="button"
+                                                                onclick="addStepMasak()">Tambah</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="form-group">
+                                                    <label>Bahan-bahan</label>
+                                                    <div id="bahanInputs">
+                                                        <div class="input-group mb-3">
+                                                            <input type="text" class="form-control" name="bahan[]"
+                                                                placeholder="Bahan 1">
+                                                            <button class="btn btn-outline-secondary" type="button"
+                                                                onclick="addBahan()">Tambah</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="form-group">
+                                                    <label>Alat-alat</label>
+                                                    <div id="alatInputs">
+                                                        <div class="input-group mb-3">
+                                                            <input type="text" class="form-control" name="alat[]"
+                                                                placeholder="Alat 1">
+                                                            <button class="btn btn-outline-secondary" type="button"
+                                                                onclick="addAlat()">Tambah</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="form-group">
+                                                    <label for="foto">Foto Resep</label>
+                                                    <input type="file" id="foto" class="form-control"
+                                                        name="foto">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary">Save changes</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
             <footer>
@@ -176,8 +286,6 @@
 
 
     <!-- Menggunakan CDN untuk jQuery dan DataTables -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
 
     <script src="{{ asset('assets') }}/static/js/components/dark.js"></script>
     <script src="{{ asset('assets') }}/extensions/perfect-scrollbar/perfect-scrollbar.min.js"></script>
@@ -194,6 +302,63 @@
 
 
     <script>
+        function addStepMasak() {
+            var html = `<div class="input-group mb-3">
+                        <input type="text" class="form-control" name="stepMasak[]" placeholder="Langkah ${$('#stepMasakInputs').children().length + 1}">
+                        <button class="btn btn-outline-secondary" type="button" onclick="removeInput(this)">Hapus</button>
+                    </div>`;
+            $('#stepMasakInputs').append(html);
+        }
+
+        function addBahan() {
+            var html = `<div class="input-group mb-3">
+                        <input type="text" class="form-control" name="bahan[]" placeholder="Bahan ${$('#bahanInputs').children().length + 1}">
+                        <button class="btn btn-outline-secondary" type="button" onclick="removeInput(this)">Hapus</button>
+                    </div>`;
+            $('#bahanInputs').append(html);
+        }
+
+        function addAlat() {
+            var html = `<div class="input-group mb-3">
+                        <input type="text" class="form-control" name="alat[]" placeholder="Alat ${$('#alatInputs').children().length + 1}">
+                        <button class="btn btn-outline-secondary" type="button" onclick="removeInput(this)">Hapus</button>
+                    </div>`;
+            $('#alatInputs').append(html);
+        }
+
+        function removeInput(button) {
+            $(button).parent().remove();
+        }
+
+        $('#recipeForm').submit(function(e) {
+            e.preventDefault();
+
+            // Mengambil semua data formulir
+            var formData = new FormData(this);
+
+            $.ajax({
+                url: "{{ route('admin.recipes.store') }}",
+                type: "POST",
+                data: formData,
+                processData: false, // Untuk memproses data FormData
+                contentType: false, // Untuk menghindari default "application/x-www-form-urlencoded"
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response) {
+                    alert('Recipe added successfully!');
+                    $('#table2').DataTable().ajax.reload();
+                    $('#recipeModal').modal('hide');
+                    $('#recipeForm')[0].reset();
+                },
+                error: function(xhr, status, error) {
+                    alert('Error adding recipe: ' + error);
+                }
+            });
+        });
+
+
+
         // Function to delete a recipe
         function deleteRecipe(id) {
             if (confirm('Are you sure you want to delete this data?')) {
