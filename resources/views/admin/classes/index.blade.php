@@ -113,7 +113,7 @@
                         <div class="col-12 col-md-6 order-md-2 order-first">
                             <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
                                 <ol class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+                                    <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
                                     <li class="breadcrumb-item active" aria-current="page">Daftar kelas</li>
                                 </ol>
                             </nav>
@@ -134,11 +134,11 @@
                                 <table class="table" id="table2">
                                     <thead>
                                         <tr>
+                                            <th>Kategori</th>
                                             <th>Judul</th>
                                             <th>Intro</th>
                                             <th>Deskripsi</th>
                                             <th>Nama Foto</th>
-                                            <th>Kategori</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
@@ -196,8 +196,10 @@
                                             <div class="col-12">
                                                 <div class="form-group">
                                                     <label for="kategori">Kategori</label>
-                                                    <input type="text" id="kategori" class="form-control"
-                                                        name="kategori" placeholder="Kategori Kelas">
+                                                    <select id="kategori" class="form-control" name="kategori">
+                                                        <option value="antisipasi">Antisipasi</option>
+                                                        <option value="tangani">Tangani</option>
+                                                    </select>
                                                 </div>
                                             </div>
                                             <div class="col-12">
@@ -216,6 +218,23 @@
                                     <button type="submit" class="btn btn-primary">Save changes</button>
                                 </div>
                             </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal untuk menampilkan foto -->
+                <div class="modal fade" id="fotoModal" tabindex="-1" aria-labelledby="fotoModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="fotoModalLabel">Foto Resep</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <img id="fotoModalImg" src="" class="img-fluid" alt="Foto Resep">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -253,6 +272,12 @@
 
 
     <script>
+        function viewFoto(namaFoto) {
+            var fotoUrl = '{{ asset('storage/foto-kelas') }}/' + namaFoto;
+            $('#fotoModalImg').attr('src', fotoUrl);
+            $('#fotoModal').modal('show');
+        }
+
         // Function to delete a class
         function deleteClass(id) {
             if (confirm('Are you sure you want to delete this data?')) {
@@ -291,6 +316,9 @@
                 "lengthChange": false,
                 "paging": false,
                 "columns": [{
+                        "data": "kategori"
+                    },
+                    {
                         "data": "title"
                     },
                     {
@@ -304,10 +332,11 @@
                         }
                     },
                     {
-                        "data": "namaFoto"
-                    },
-                    {
-                        "data": "kategori"
+                        "data": "namaFoto",
+                        "render": function(data, type, row) {
+                            return '<button type="button" class="btn btn-primary btn-sm" onclick="viewFoto(\'' +
+                                data + '\')">Lihat Foto</button>';
+                        }
                     },
                     {
                         "data": null,
