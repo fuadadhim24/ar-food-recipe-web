@@ -31,4 +31,35 @@ class KelasController extends Controller
         $class->delete();
         return response()->json(['success' => true]);
     }
+    public function store(Request $request)
+    {
+        // Validasi input jika diperlukan
+        $request->validate([
+            'title' => 'required|string',
+            'intro' => 'required|string',
+            'deskripsi' => 'required|string',
+            'kategori' => 'required|string',
+            'foto' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        // Proses upload foto
+        if ($request->hasFile('foto')) {
+            $fotoPath = $request->file('foto')->store('public/foto-kelas');
+            $namaFoto = basename($fotoPath);
+        } else {
+            $namaFoto = null;
+        }
+
+        // Simpan data kelas ke dalam database
+        Classes::create([
+            'title' => $request->title,
+            'intro' => $request->intro,
+            'deskripsi' => $request->deskripsi,
+            'kategori' => $request->kategori,
+            'namaFoto' => $namaFoto,
+        ]);
+
+        return response()->json(['success' => true]);
+    }
+
 }

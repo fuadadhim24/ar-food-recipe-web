@@ -153,6 +153,73 @@
                 </section>
                 <!-- Minimal jQuery Datatable end -->
 
+                <!-- Button to trigger modal -->
+                <button type="button" class="btn btn-primary mb-2" data-bs-toggle="modal"
+                    data-bs-target="#recipeModal">
+                    Tambah Resep
+                </button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="recipeModal" tabindex="-1" aria-labelledby="recipeModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <form class="form form-vertical" id="recipeForm" enctype="multipart/form-data">
+                                @csrf
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="recipeModalLabel">Tambah Kelas Baru</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="form-body">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="form-group">
+                                                    <label for="title">Judul</label>
+                                                    <input type="text" id="title" class="form-control"
+                                                        name="title" placeholder="Judul Kelas">
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="form-group">
+                                                    <label for="intro">Intro</label>
+                                                    <textarea id="intro" class="form-control" name="intro" placeholder="Intro Kelas"></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="form-group">
+                                                    <label for="deskripsi">Deskripsi</label>
+                                                    <textarea id="deskripsi" class="form-control" name="deskripsi" placeholder="Deskripsi Kelas"></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="form-group">
+                                                    <label for="kategori">Kategori</label>
+                                                    <input type="text" id="kategori" class="form-control"
+                                                        name="kategori" placeholder="Kategori Kelas">
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="form-group">
+                                                    <label for="foto">Foto Kelas</label>
+                                                    <input type="file" id="foto" class="form-control"
+                                                        name="foto">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary">Save changes</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
             <footer>
@@ -250,6 +317,33 @@
                         }
                     }
                 ]
+            });
+        });
+
+        $('#recipeForm').submit(function(e) {
+            e.preventDefault();
+
+            // Mengambil semua data formulir
+            var formData = new FormData(this);
+
+            $.ajax({
+                url: "{{ route('admin.classes.store') }}",
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response) {
+                    alert('Kelas berhasil ditambahkan!');
+                    $('#table2').DataTable().ajax.reload();
+                    $('#recipeModal').modal('hide');
+                    $('#recipeForm')[0].reset();
+                },
+                error: function(xhr, status, error) {
+                    alert('Gagal menambahkan kelas: ' + error);
+                }
             });
         });
     </script>
