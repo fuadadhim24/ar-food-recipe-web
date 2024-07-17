@@ -39,12 +39,12 @@ class KelasController extends Controller
             'intro' => 'required|string',
             'deskripsi' => 'required|string',
             'kategori' => 'required|string',
-            'foto' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'foto' => 'required|image|mimes:jpeg,png,jpg,gif',
         ]);
 
         // Proses upload foto
         if ($request->hasFile('foto')) {
-            $fotoPath = $request->file('foto')->store('public/foto-kelas');
+            $fotoPath = $request->file('foto')->store('public/foto-resep');
             $namaFoto = basename($fotoPath);
         } else {
             $namaFoto = null;
@@ -62,4 +62,8 @@ class KelasController extends Controller
         return response()->json(['success' => true]);
     }
 
+    public function viewSensitiveFile($fileName){
+        $file = storage_path('app/public/foto-kelas/'.$fileName);
+        return response()->file($file);
+    }
 }

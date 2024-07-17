@@ -320,7 +320,8 @@
 
     <script>
         function viewFoto(namaFoto) {
-            var fotoUrl = '{{ asset('storage/foto-resep') }}/' + namaFoto;
+            var fotoUrl = '{{ route('admin.recipes.private', ['file' => ':namaFoto']) }}';
+            fotoUrl = fotoUrl.replace(':namaFoto', namaFoto);
             $('#fotoModalImg').attr('src', fotoUrl);
             $('#fotoModal').modal('show');
         }

@@ -225,15 +225,18 @@
                 <!-- Modal untuk menampilkan foto -->
                 <div class="modal fade" id="fotoModal" tabindex="-1" aria-labelledby="fotoModalLabel"
                     aria-hidden="true">
-                    <div class="modal-dialog modal-lg">
+                    <div class="modal-dialog modal-sm">
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title" id="fotoModalLabel">Foto Resep</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                     aria-label="Close"></button>
                             </div>
-                            <div class="modal-body">
-                                <img id="fotoModalImg" src="" class="img-fluid" alt="Foto Resep">
+                            <div class="modal-body"
+                                style="display: flex;
+        justify-content: center;
+        align-items: center;">
+                                <img id="fotoModalImg" style="vertical-align: middle;" src="" class="img-fluid" alt="Foto Resep">
                             </div>
                         </div>
                     </div>
@@ -273,7 +276,8 @@
 
     <script>
         function viewFoto(namaFoto) {
-            var fotoUrl = '{{ asset('storage/foto-kelas') }}/' + namaFoto;
+            var fotoUrl = '{{ route('admin.classes.private', ['file' => ':namaFoto']) }}';
+            fotoUrl = fotoUrl.replace(':namaFoto', namaFoto);
             $('#fotoModalImg').attr('src', fotoUrl);
             $('#fotoModal').modal('show');
         }

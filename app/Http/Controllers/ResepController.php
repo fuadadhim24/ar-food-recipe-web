@@ -29,7 +29,6 @@ class ResepController extends Controller
     
     public function store(Request $request)
     {
-        // Validasi input jika diperlukan
         $request->validate([
             'nama' => 'required|string',
             'deskripsi' => 'required|string',
@@ -38,12 +37,12 @@ class ResepController extends Controller
             'bahan' => 'required',
             'alat' => 'required',
             'stepMasak' => 'required',
-            'foto' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'foto' => 'required|image|mimes:jpeg,png,jpg,gif',
         ]);
 
         if ($request->hasFile('foto')) {
             $fotoPath = $request->file('foto')->store('public/foto-resep');
-            $namaFoto = basename($fotoPath); // Dapatkan nama file dari path
+            $namaFoto = basename($fotoPath);
         } else {
             $namaFoto = null;
         }
@@ -61,6 +60,10 @@ class ResepController extends Controller
         ]);
 
         return response()->json(['success' => true]);
+    }
+    public function viewSensitiveFile($fileName){
+        $file = storage_path('app/public/foto-resep/'.$fileName);
+        return response()->file($file);
     }
 
 }

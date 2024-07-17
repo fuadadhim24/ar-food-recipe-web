@@ -17,6 +17,7 @@ Route::get('/kelas/data-mobile', [KelasController::class, 'getData'])->name('adm
 Route::post('/kelas/data', [KelasController::class, 'getData'])->middleware(['auth', 'verified'])->name('admin.classes.data');
 Route::delete('/kelas/{id}', [KelasController::class, 'destroy'])->middleware(['auth', 'verified'])->name('admin.classes.destroy');
 Route::post('/kelas/store', [KelasController::class, 'store'])->name('admin.classes.store');
+Route::get('/kelas/private/{file}', [KelasController::class, 'viewSensitiveFile'])->name('admin.classes.private');
 
 // resep
 Route::get('/resep', function () {return view('admin.recipes.index');})->middleware(['auth', 'verified'])->name('resep');
@@ -24,6 +25,7 @@ Route::post('/resep/data', [ResepController::class, 'getData'])->middleware(['au
 Route::get('/resep/data-mobile', [ResepController::class, 'getData'])->name('admin.recipes.data.mobile');
 Route::delete('/resep/{id}', [ResepController::class, 'destroy'])->middleware(['auth', 'verified'])->name('admin.recipes.destroy');
 Route::post('/recipes/store', [ResepController::class, 'store'])->name('admin.recipes.store');
+Route::get('/recipes/private/{file}', [ResepController::class, 'viewSensitiveFile'])->name('admin.recipes.private');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
